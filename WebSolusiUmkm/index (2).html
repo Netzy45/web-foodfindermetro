@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jajan Metro – Direktori UMKM & Kuliner Lokal</title>
+  <link rel="icon" type="image/png" href="images/logowebnb.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tambah.css">
+  <link rel="stylesheet" href="fitur.css">
+</head>
+
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="wrapBrand">
+        <p class="brand">FoodFinderMetro</p>
+        <img src="images/logowebnb.png" alt="" class="logoUntukHp">
+      </div>
+      <div class="wrapWelcome">
+        <div class="alone">
+          <h1>Enak, lokal, dan belum banyak yang tahu.</h1>
+          <p class="lead">Warung kaki lima, kafe, dan produk UMKM Kota Metro yang dipilih karena rasanya, bukan karena
+            iklannya.
+          </p>
+        </div>
+        <img src="images/logowebnb.png" class="logoWeb">
+      </div>
+
+      <form class="filters" id="filters" role="search">
+        <label class="sr">Cari nama atau menu
+          <input type="search" id="q" placeholder="Cari nama tempat atau menu, mis. “bakso”">
+        </label>
+        <label class="sr">Kecamatan
+          <select id="kecamatan">
+            <option value="">Semua kecamatan</option>
+          </select>
+        </label>
+        <label class="sr">Urutkan
+          <select id="sort">
+            <option value="rating">Rating tertinggi</option>
+            <option value="murah">Harga termurah</option>
+            <option value="nama">Nama A - Z</option>
+          </select>
+        </label>
+      </form>
+      <div class="chips" id="chips" role="group" aria-label="Kategori"></div>
+      <div class="chips fchips" id="fchips" role="group" aria-label="Filter lainnya"></div>
+      <div class="tambah-bar">
+        <p>Tahu tempat enak atau punya usaha sendiri?</p>
+        <button type="button" class="btn btn-kunyit" id="btn-tambah">+ Tambah lokasi</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="p-daftar">
+    <p class="count" id="count" aria-live="polite"></p>
+    <section class="grid" id="grid"></section>
+    </main>
+
+  <section class="halaman" id="p-tren" aria-labelledby="h-tren">
+    <div class="wrap">
+      <header class="hal-head">
+        <h2 id="h-tren">Tren &amp; peringkat</h2>
+        <p class="lead2">Apa yang lagi dicari warga Metro, dan tempat mana yang paling dipuji.</p>
+      </header>
+
+      <section class="blok">
+        <h3>3 makanan paling enak</h3>
+        <p class="meta">Berdasarkan suara 👍 pengunjung pada menu, bukan seberapa ramai tempatnya.</p>
+        <div class="top3" id="top3"></div>
+      </section>
+
+      <div class="charts">
+        <section class="blok">
+          <h3>Tempat paling banyak dilihat</h3>
+          <p class="meta">14 hari terakhir: detail dibuka + tombol Gojek ditekan.</p>
+          <div class="chart-box"><canvas id="ch-tempat" role="img" aria-label="Grafik tren tempat terpopuler"></canvas></div>
+          <p class="meta kosong" id="note-tempat" hidden></p>
+        </section>
+        <section class="blok">
+          <h3>Makanan paling banyak disukai</h3>
+          <p class="meta">14 hari terakhir: suara 👍 per menu.</p>
+          <div class="chart-box"><canvas id="ch-menu" role="img" aria-label="Grafik tren makanan terpopuler"></canvas></div>
+          <p class="meta kosong" id="note-menu" hidden></p>
+        </section>
+      </div>
+
+      <section class="blok">
+        <h3>Peringkat 10 besar</h3>
+        <p class="meta">Skor menggabungkan rating dan jumlah ulasan, jadi satu bintang 5 tidak langsung mengalahkan puluhan ulasan bagus.</p>
+        <div class="rank-filter">
+          <label class="sr">Kategori <select id="rk-kat"></select></label>
+          <label class="sr">Kecamatan <select id="rk-kec"></select></label>
+        </div>
+        <ol class="rank" id="rank"></ol>
+      </section>
+    </div>
+  </section>
+
+  <section class="halaman pilih" id="p-pilih" aria-labelledby="h-pilih">
+    <div class="wrap">
+      <header class="hal-head">
+        <h2 id="h-pilih">Bingung mau makan apa?</h2>
+        <p class="lead2">Jawab tiga hal, kami pilihkan sampai 3 tempat.</p>
+      </header>
+      <form id="pform" class="pform">
+        <label>Budget per porsi
+          <select id="pl-budget">
+            <option value="15000">Sampai Rp15.000</option>
+            <option value="25000" selected>Sampai Rp25.000</option>
+            <option value="40000">Sampai Rp40.000</option>
+            <option value="0">Bebas</option>
+          </select></label>
+        <label>Lagi pengen <select id="pl-kat"></select></label>
+        <label>Area <select id="pl-kec"></select></label>
+        <button class="btn btn-kunyit" type="submit" id="pl-btn">Pilihin dong!</button>
+      </form>
+      <p class="meta" id="pl-info" role="status"></p>
+      <section class="grid" id="pl-hasil"></section>
+    </div>
+  </section>
+
+  <dialog id="detail" aria-labelledby="d-nama">
+    <button class="close" id="close" aria-label="Tutup">×</button>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <dialog id="tambah" aria-labelledby="t-judul">
+    <button class="close" id="tambah-close" type="button" aria-label="Tutup">×</button>
+    <div class="tambah-body">
+      <h2 id="t-judul">Tambah lokasi UMKM</h2>
+      <p class="meta">Isi formulir, lalu tunggu persetujuan admin. Tempat baru tampil setelah diperiksa.</p>
+      <form id="tform" novalidate>
+        <label class="sr" aria-hidden="true">Website <input id="t-web" tabindex="-1" autocomplete="off"></label>
+        <label>Nomor WhatsApp <small>Hanya dilihat admin, tidak ditampilkan di website.</small>
+          <input id="t-wa" type="tel" inputmode="tel" placeholder="08123456789" maxlength="20"></label>
+        <label>Nama UMKM <input id="t-nama" maxlength="60" placeholder="mis. Bakso Pak Darmo"></label>
+        <label>Alamat <textarea id="t-alamat" rows="2" maxlength="150"
+            placeholder="Jl. …, Kecamatan …"></textarea></label>
+        <label>Jam buka <input id="t-jam" maxlength="30" placeholder="09.00–21.00"></label>
+        <label>Kisaran harga (Rp)
+          <span class="harga-row">
+            <input id="t-min" inputmode="numeric" placeholder="Termurah, mis. 10000">
+            <input id="t-max" inputmode="numeric" placeholder="Termahal, mis. 25000">
+          </span></label>
+        <label>Menu andalan <small>Pisahkan dengan koma.</small>
+          <input id="t-menu" maxlength="120" placeholder="Bakso urat, Bakso tahu, Es jeruk"></label>
+        <label>Link Google Maps <input id="t-maps" type="url" maxlength="300"
+            placeholder="https://maps.app.goo.gl/…"></label>
+        <label>Link akun Gojek / GoFood <small>Opsional. Salin dari tombol Bagikan di aplikasi Gojek.</small>
+          <input id="t-gofood" type="url" maxlength="300" placeholder="https://gofood.link/…"></label>
+        <label>Link video TikTok <small>Opsional. Link lengkap, mis. https://www.tiktok.com/@akun/video/123…</small>
+          <input id="t-video" type="url" maxlength="300" placeholder="https://www.tiktok.com/@akun/video/…"></label>
+        <fieldset class="grup">
+          <legend>Fasilitas <small>Wajib dijawab semua.</small></legend>
+          <div id="t-fas"></div>
+        </fieldset>
+        <fieldset class="grup">
+          <legend>Jalan &amp; akses <small>Wajib dijawab.</small></legend>
+          <div class="baris-ya" role="radiogroup" aria-label="Jalan menuju kedai mayoritas bagus">
+            <span>🛣️ Jalan menuju kedai mayoritas bagus?</span>
+            <label class="pilih"><input type="radio" name="t-jalan" value="1"> Ya</label>
+            <label class="pilih"><input type="radio" name="t-jalan" value="0"> Tidak</label>
+          </div>
+          <div class="baris-ya" role="radiogroup" aria-label="Kendaraan yang bisa masuk">
+            <span>Kendaraan yang bisa masuk</span>
+            <label class="pilih"><input type="radio" name="t-akses" value="mobil"> 🚗 Mobil &amp; motor</label>
+            <label class="pilih"><input type="radio" name="t-akses" value="motor"> 🏍️ Khusus motor</label>
+          </div>
+        </fieldset>
+        <label>Foto kedai <small>Wajib. JPG/PNG, otomatis dikecilkan.</small>
+          <input id="t-foto" type="file" accept="image/*">
+          <img id="t-prev" alt="Pratinjau foto" hidden></label>
+        <p class="pesan-err" id="t-pesan" role="status"></p>
+        <button class="btn" type="submit">Kirim pengajuan</button>
+      </form>
+      <div id="t-sukses" hidden>
+        <h3>Terima kasih! 🎉</h3>
+        <p>Pengajuanmu sudah terkirim dan sedang menunggu persetujuan admin.</p>
+        <button class="btn" type="button" id="t-selesai">Tutup</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+  <script src="config.js"></script>
+  <script src="tambah.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="fitur.js"></script>
+</body>
+
+</html>

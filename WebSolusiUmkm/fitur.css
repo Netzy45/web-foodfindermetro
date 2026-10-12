@@ -1,0 +1,111 @@
+/* ===== Halaman 2 & 3 (di bawah daftar) ===== */
+.halaman{border-top:1px solid var(--line);padding:44px 0 36px;margin-top:8px}
+.hal-head{margin-bottom:8px}
+.hal-head h2{font:800 clamp(1.7rem,4.5vw,2.5rem)/1.08 var(--f-head);letter-spacing:-.02em;margin:0 0 6px}
+.lead2{margin:0;color:var(--muted);max-width:100%}
+.blok{padding:22px 0 4px}
+.blok h3{font:800 1.2rem/1.2 var(--f-head);margin:0 0 4px}
+.blok>.meta{margin-bottom:14px}
+
+/* Top 3 makanan: juara pertama paling menonjol */
+.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{gap:4px;position:relative}
+.tile .medali{font-size:1.9rem;line-height:1}
+.tile strong{font:800 1.2rem/1.2 var(--f-head)}
+.tile:first-child{border:2px solid var(--kunyit);box-shadow:0 0 0 4px rgba(242,183,5,.18)}
+.top3 .empty{grid-column:1/-1;padding:18px 0}
+
+/* Dua grafik berdampingan */
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.charts>.blok{min-width:0}
+.chart-box{position:relative;width:100%;min-width:0;overflow:hidden;height:260px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px}
+.chart-box canvas{max-width:100%}
+.kosong{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:46px 18px;text-align:center;margin:0}
+
+/* Peringkat */
+.rank-filter{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rank-filter select{border:2px solid var(--line)}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rank-item{flex-direction:row;align-items:center;gap:14px;width:100%;padding:14px 18px}
+.rank-item .no{flex:none;display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--bg);font:800 1.05rem var(--f-head);color:var(--pandan)}
+.rank li:nth-child(-n+3) .no{background:var(--kunyit);color:#1B1F1C}
+.rank-item .isi{display:flex;flex-direction:column;flex:1;min-width:0}
+.rank-item small{color:var(--muted)}
+.rank .empty{padding:20px 0}
+@media (prefers-color-scheme:dark){.rank-item .no{color:var(--kunyit)}}
+
+/* Halaman 3: pita hijau seperti hero */
+.halaman{width: 100%;text-align: center;}
+.halaman.pilih{background:var(--pandan);color:#fff;border-top:6px solid var(--kunyit); margin-top:24px;padding:40px 0 48px}
+.pilih .lead2,.pilih .meta,.pilih .empty{color:#CFE0D6}
+.pform{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:12px;align-items:end;margin:18px 0 12px;}
+.pform label{display:grid;gap:6px;font-weight:600;font-size:.95rem}
+.pform select{color:#1B1F1C}
+#pl-hasil{padding-bottom:0}
+#pl-hasil .card img{aspect-ratio:4/3;object-fit:cover;border-radius:10px;width:100%}
+#pl-hasil .card{color:var(--ink)}
+#pl-hasil .card .meta{color:var(--muted)}
+
+/* ===== Detail tempat: tombol Gojek + suka menu ===== */
+.aksi{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn-gojek{background:#00AA13}
+.menu-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.menu-like{font:600 .9rem var(--f-body);color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:999px;padding:5px 13px;cursor:pointer}
+.menu-like .n{color:var(--muted);font-weight:500}
+.menu-like[aria-pressed="true"]{background:var(--kunyit);border-color:var(--kunyit);color:#1B1F1C}
+.menu-like[aria-pressed="true"] .n{color:#1B1F1C}
+
+@media (max-width:820px){
+  .charts{grid-template-columns:minmax(0,1fr);gap:0}
+  .pform{grid-template-columns:1fr 1fr}
+  .pform button{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .top3{grid-template-columns:1fr}
+  .rank-filter,.pform{grid-template-columns:1fr}
+  .chart-box{height:230px}
+  .halaman{padding-top:34px}
+}
+
+/* ===== Buka/Tutup, akses, fasilitas ===== */
+.wrapClose{flex-wrap:wrap;gap:6px 0}
+.closeTag.buka{color:#1E7A52}
+.closeTag.tutup{color:var(--muted)}
+.akses{margin-left:auto;display:flex;gap:8px;font-size:1.15rem;line-height:1}
+#detail-body .wrapClose{padding-right:44px}
+.fas-list{list-style:none;margin:10px 0 4px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.fas{font-size:.85rem;font-weight:600;border-radius:999px;padding:3px 11px;border:1px solid var(--line);background:var(--bg)}
+.fas.ya{color:#1E7A52;border-color:#1E7A52}
+.fas.tidak{color:var(--muted)}
+.akses-teks{margin:6px 0 0}
+@media (prefers-color-scheme:dark){.closeTag.buka,.fas.ya{color:#5FD39B;border-color:#5FD39B}.closeTag.buka{border:0}}
+
+/* Filter tambahan di hero */
+.fchips{margin-top:10px}
+.fchip{font:600 .85rem var(--f-body);border:2px solid #4B7A63;background:transparent;color:#CFE0D6;border-radius:999px;padding:5px 13px;cursor:pointer}
+.fchip:hover{border-color:var(--kunyit)}
+.fchip[aria-pressed="true"]{background:#fff;border-color:#fff;color:#17402E}
+
+/* Video di detail */
+.video-box{margin:14px 0 0;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.btn-video{background:#1B1F1C}
+.video-box iframe{width:100%;max-width:340px;height:640px;border:0;border-radius:12px;background:#000}
+
+/* ===== Dialog bisa di-scroll dengan jari di HP ===== */
+dialog{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;max-height:90vh;max-height:90dvh}
+body:has(dialog[open]){overflow:hidden}
+.close{position:sticky;top:6px;right:auto;float:right;z-index:3;width:2.4rem;height:2.4rem;margin:6px 8px -2.8rem 0;border-radius:50%;background:var(--card)}
+
+/* ===== Form tambah lokasi: Ya/Tidak ===== */
+.grup{border:2px solid var(--line);border-radius:12px;padding:10px 14px 6px;margin:0;min-width:0}
+.grup legend{font-weight:600;padding:0 6px}
+.grup legend small{font-weight:400;color:var(--muted)}
+.baris-ya{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:7px 0;border-top:1px solid var(--line)}
+.baris-ya:first-child{border-top:0}
+.baris-ya>span{flex:1 1 150px}
+.pilih{display:inline-flex!important;align-items:center;gap:6px;font-weight:500!important;cursor:pointer;padding:4px 0}
+.pilih input{width:1.15rem;height:1.15rem;accent-color:#17402E;margin:0}
+
+/* Hover kuning hanya untuk perangkat dengan mouse (di HP hover suka "menempel") */
+
+@media (hover:hover){.menu-like:not([aria-pressed="true"]):hover{border-color:var(--kunyit)}}

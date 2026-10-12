@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin – Jajan Metro</title>
+  <link rel="icon" type="image/png" href="images/logowebnb.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tambah.css">
+</head>
+<body>
+  <header class="hero"><div class="wrap">
+    <p class="brand">FoodFindMetro · Admin</p>
+    <h1 class="kecil">Periksa pengajuan lokasi</h1>
+    <div class="chips" id="tabs" hidden></div>
+  </div></header>
+  <main class="wrap">
+    <form class="panel" id="login">
+      <label>Password admin <input id="pw" type="password" autocomplete="current-password"></label>
+      <p class="pesan-err" id="l-pesan"></p>
+      <button class="btn" type="submit">Masuk</button>
+    </form>
+    <section id="panel" hidden>
+      <p class="count" id="a-count" aria-live="polite"></p>
+      <div id="a-list"></div>
+    </section>
+  </main>
+  <datalist id="kec"></datalist>
+  <script src="config.js"></script>
+  <script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const LABEL = { pending: "Menunggu", approved: "Disetujui", rejected: "Ditolak" };
+    let pw = "", data = [], tab = "pending";
+    const pil = (v, l) => l.map(([k, t]) => `<option value="${k}"${String(v ?? "") === k ? " selected" : ""}>${t}</option>`).join("");
+    const fm = str => Object.fromEntries(String(str || "").split(",").map(x => x.split(":")).filter(x => x.length === 2));
+    $("kec").innerHTML = DAFTAR_KECAMATAN.map(k => `<option value="${k}">`).join("");
+
+    async function panggil(p) {
+      if (!SERVER_URL) throw new Error("SERVER_URL di config.js belum diisi.");
+      const j = await (await fetch(SERVER_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ password: pw, ...p }) })).json();
+      if (!j.ok) throw new Error(j.error);
+      return j.data;
+    }
+    async function muat() { data = await panggil({ action: "admin_list" }); gambar(); }
+
+    function gambar() {
+      $("tabs").innerHTML = Object.keys(LABEL).map(s =>
+        `<button type="button" class="chip" data-s="${s}" aria-pressed="${s === tab}">${LABEL[s]} (${data.filter(r => r.status === s).length})</button>`).join("");
+      const l = data.filter(r => r.status === tab).reverse();
+      $("a-count").textContent = l.length ? "" : "Tidak ada data di tab ini.";
+      $("a-list").innerHTML = l.map(r => `
+        <article class="adm-card" data-id="${esc(r.id)}">
+          <h2>${esc(r.nama)}</h2>
+          ${r.gambar ? `<img src="${esc(r.gambar)}" alt="Foto dari pengaju">` : ""}
+          <dl>
+            <dt>WhatsApp</dt><dd><a href="https://wa.me/${esc(r.wa.replace(/\D/g, ""))}" target="_blank" rel="noopener">+${esc(r.wa)}</a></dd>
+            <dt>Alamat</dt><dd>${esc(r.alamat)}</dd>
+            <dt>Jam buka</dt><dd>${esc(r.jam)}</dd>
+            <dt>Harga</dt><dd>Rp${(+r.hargaMin).toLocaleString("id-ID")} – Rp${(+r.hargaMax).toLocaleString("id-ID")}</dd>
+            <dt>Menu andalan</dt><dd>${esc(r.menu)}</dd>
+            <dt>Google Maps</dt><dd><a href="${esc(r.maps)}" target="_blank" rel="noopener noreferrer">Cek lokasi ↗</a></dd>
+            ${r.gofood ? `<dt>GoFood</dt><dd><a href="${esc(r.gofood)}" target="_blank" rel="noopener noreferrer">Cek link ↗</a></dd>` : ""}
+            <dt>Diajukan</dt><dd>${esc(new Date(r.waktu).toLocaleString("id-ID"))}</dd>
+          </dl>
+          <div class="adm-set">
+            <label>Kategori <select class="f-kat">${DAFTAR_KATEGORI.map(k => `<option${k === r.kategori ? " selected" : ""}>${k}</option>`).join("")}</select></label>
+            <label>Kecamatan <input class="f-kec" list="kec" value="${esc(r.kecamatan)}" placeholder="Pilih / ketik"></label>
+            <label>Foto (opsional) <input class="f-foto" value="${esc(r.foto)}" placeholder="images/nama.jpg"></label>
+          </div>
+          <div class="adm-set">
+            <label>Link Gojek / GoFood <input class="f-gofood" value="${esc(r.gofood)}" placeholder="https://gofood.link/…"></label>
+            <label>Link video TikTok <input class="f-video" value="${esc(r.video)}" placeholder="https://www.tiktok.com/@akun/video/…"></label>
+            <label>Jalan menuju kedai bagus <select class="f-jalan">${pil(r.jalanBagus, [["", "Belum diisi"], ["1", "Ya 🛣️"], ["0", "Tidak"]])}</select></label>
+            <label>Kendaraan <select class="f-akses">${pil(r.akses, [["", "Belum diisi"], ["mobil", "🚗 Mobil & motor"], ["motor", "🏍️ Khusus motor"]])}</select></label>
+          </div>
+          <fieldset class="adm-fas"><legend>Fasilitas</legend>
+            ${FASILITAS.map(f => `<label>${esc(f.label)} <select class="f-fas" data-k="${f.k}">${pil(fm(r.fasilitas)[f.k] ?? "", [["", "Belum diisi"], ["1", "Ya ✓"], ["0", "Tidak ✕"]])}</select></label>`).join("")}
+          </fieldset>
+          <div class="adm-set">
+            <label>Status buka/tutup <select class="f-buka">${pil(r.statusManual, [["", "Otomatis (ikut jam buka)"], ["tutup", "Tutup sementara"], ["buka", "Paksa buka"]])}</select></label>
+            <label>Berlaku sampai <small>Kosong = sampai diubah</small> <input class="f-sampai" type="date" value="${esc(r.tutupSampai)}"></label>
+          </div>
+          <div class="adm-act">
+            ${r.status !== "approved" ? `<button class="btn btn-ok" data-a="approved">Setujui</button>` : `<button class="btn btn-ok" data-a="approved">Simpan perubahan</button><button class="btn btn-no" data-a="pending">Tarik dari web</button>`}
+            ${r.status !== "rejected" ? `<button class="btn btn-no" data-a="rejected">Tolak</button>` : ""}
+            <button class="btn btn-no" data-a="hapus">Hapus</button>
+          </div>
+        </article>`).join("");
+    }
+
+    $("login").addEventListener("submit", async e => {
+      e.preventDefault(); pw = $("pw").value;
+      try { await muat(); $("login").hidden = true; $("panel").hidden = false; $("tabs").hidden = false; }
+      catch (x) { $("l-pesan").textContent = x.message; }
+    });
+    $("tabs").addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) { tab = b.dataset.s; gambar(); } });
+    $("a-list").addEventListener("click", async e => {
+      const b = e.target.closest("button[data-a]"); if (!b) return;
+      const c = b.closest(".adm-card"), id = c.dataset.id, a = b.dataset.a;
+      try {
+        if (a === "hapus") { if (!confirm("Hapus \"" + c.querySelector("h2").textContent + "\" permanen? Foto di Drive ikut dihapus.")) return; await panggil({ action: "admin_delete", id }); }
+        else {
+          const kategori = c.querySelector(".f-kat").value, kecamatan = c.querySelector(".f-kec").value.trim();
+          if (a === "approved" && !kecamatan) { alert("Isi kecamatan dulu sebelum menyetujui."); return; }
+          await panggil({
+            action: "admin_update", id, status: a, kategori, kecamatan, foto: c.querySelector(".f-foto").value.trim(),
+            gofood: c.querySelector(".f-gofood").value.trim(), video: c.querySelector(".f-video").value.trim(), jalanBagus: c.querySelector(".f-jalan").value, akses: c.querySelector(".f-akses").value,
+            fasilitas: [...c.querySelectorAll(".f-fas")].filter(x => x.value !== "").map(x => x.dataset.k + ":" + x.value).join(","),
+            buka: c.querySelector(".f-buka").value, tutupSampai: c.querySelector(".f-sampai").value
+          });
+        }
+        await muat();
+      } catch (x) { alert(x.message); }
+    });
+  })();
+  </script>
+</body>
+</html>

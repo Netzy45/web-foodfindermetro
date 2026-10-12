@@ -1,0 +1,29 @@
+[hidden]{display:none!important}
+.tambah-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:20px;color:#CFE0D6}
+.tambah-bar p{margin:0}
+.btn-kunyit{background:var(--kunyit);color:#1B1F1C}
+.btn-ok{background:var(--pandan);color:#fff}
+.btn-no{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.tambah-body{padding:26px}
+.tambah-body h2{margin-bottom:6px}
+.tambah-body form{display:grid;gap:14px;margin-top:16px}
+.tambah-body label,.adm-set label{display:grid;gap:6px;font-weight:600;font-size:.95rem}
+.tambah-body label small{font-weight:400;color:var(--muted)}
+.tambah-body input,.tambah-body textarea,.adm-card input,.adm-card select,.panel input{color:#1B1F1C;background:#fff;border:2px solid var(--line)}
+.harga-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pesan-err{color:var(--sambal);margin:0;font-weight:600}
+.hero h1.kecil{font-size:clamp(1.6rem,4vw,2.2rem);max-width:none}
+.panel{max-width:380px;margin:40px auto;display:grid;gap:12px}
+.adm-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.adm-card h2{font:800 1.2rem var(--f-head);margin:0 0 4px}
+.adm-set{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.adm-act{display:flex;flex-wrap:wrap;gap:8px}
+.adm-card dl{margin:10px 0}
+@media (max-width:640px){.adm-set,.harga-row{grid-template-columns:1fr}}
+#t-prev{max-width:100%;max-height:200px;object-fit:cover;border-radius:10px}
+.adm-card img{max-width:220px;border-radius:10px;display:block;margin:10px 0}
+
+.adm-fas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;border:1px solid var(--line);border-radius:10px;padding:10px;margin:0 0 12px}
+.adm-fas legend{font-weight:600;padding:0 6px}
+.adm-fas label{display:grid;gap:4px;font-size:.9rem}
+.adm-set small{font-weight:400;color:var(--muted)}
